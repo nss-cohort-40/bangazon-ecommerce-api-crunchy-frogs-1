@@ -15,8 +15,6 @@ class Customer(models.Model):
         verbose_name = ("Customer")
         verbose_name_plural = ("Customers")
 
-    def __str__(self):
-        return self.name
 
     def get_absolute_url(self):
         return reverse("Customer_detail", kwargs={"pk": self.pk})

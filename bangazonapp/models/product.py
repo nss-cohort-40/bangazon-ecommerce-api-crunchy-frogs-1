@@ -12,7 +12,7 @@ class Product(models.Model):
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
     location = models.CharField(max_length=75)
-    image_path = models.CharField(max_length=255)
+    image_path = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -20,8 +20,6 @@ class Product(models.Model):
         verbose_name = ("Product")
         verbose_name_plural = ("Products")
 
-    def __str__(self):
-        return self.name
 
     def get_absolute_url(self):
         return reverse("Product_detail", kwargs={"pk": self.pk})

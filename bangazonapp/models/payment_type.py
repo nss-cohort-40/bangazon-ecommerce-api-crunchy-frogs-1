@@ -15,8 +15,5 @@ class PaymentType(models.Model):
         verbose_name = ("PaymentType")
         verbose_name_plural = ("PaymentTypes")
 
-    def __str__(self):
-        return self.name
-
     def get_absolute_url(self):
         return reverse("PaymentType_detail", kwargs={"pk": self.pk})
