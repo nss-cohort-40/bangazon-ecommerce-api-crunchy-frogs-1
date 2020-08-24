@@ -11,7 +11,7 @@ from bangazonapp.models import Order
 from bangazonapp.models import PaymentType
 
 
-class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Order
