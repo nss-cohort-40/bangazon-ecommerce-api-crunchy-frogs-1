@@ -27,15 +27,11 @@ class Orders(ViewSet):
     def create(self, request):
         """Handle POST operations"""
 
-
-
-
-
-
         order = Order.objects.create(
-            created_at = request.data["created_at"]
+            created_at = request.data["created_at"],
+            customer_id = request.data["customer_id"],
+            payment_type_id = request.data["payment_type_id"]
         )
-
 
         return Response(serializer.data)
 

@@ -17,16 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from bangazonapp.views import Customers, UserViewSet, Orders
+from bangazonapp.views import Customers, UserViewSet, ProductTypes, Orders
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'customer', Customers, 'customer')
 router.register(r'users', UserViewSet, 'user')
 router.register(r'order', Orders, 'user')
-
+router.register(r'product_types', ProductTypes, 'product_type')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
 ]
-
