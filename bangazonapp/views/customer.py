@@ -78,7 +78,7 @@ class Customers(ViewSet):
         customer.phone_number = request.data["phone_number"]
         customer.save()
 
-        user = User.objects.get(pk=pk)
+        user = User.objects.get(pk=customer.user.id)
         user.first_name = request.data["first_name"]
         user.last_name = request.data["last_name"]
         user.username = request.data["username"]
