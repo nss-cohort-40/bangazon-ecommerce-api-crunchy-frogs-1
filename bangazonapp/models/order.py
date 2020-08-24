@@ -13,5 +13,5 @@ class Order(models.Model):
         verbose_name_plural = ("Orders")
 
 
-    def get_absolute_url(self):
-        return reverse("Order_detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("Order_detail", kwargs={"pk": self.pk})

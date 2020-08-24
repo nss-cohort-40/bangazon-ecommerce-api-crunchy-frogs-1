@@ -23,7 +23,7 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'address', 'phone_number', 'user')
-        depth = 2
+        depth = 1
 
 
 

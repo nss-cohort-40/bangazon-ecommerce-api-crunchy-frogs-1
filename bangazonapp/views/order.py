@@ -7,11 +7,13 @@ from rest_framework import serializers
 from rest_framework import status
 from django.contrib.auth.models import User
 from bangazonapp.models import Customer
-from bangazonapp.models import Order
-from bangazonapp.models import PaymentType
+from bangazonapp.models import Order, PaymentType
+from .payment_type import PaymentTypeSerializer
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
+
+    # payment_type = PaymentTypeSerializer()
 
     class Meta:
         model = Order
@@ -20,7 +22,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'created_at', 'customer', 'payment_type')
-        depth = 2
+        depth = 1
 
 class Orders(ViewSet):
 
@@ -28,9 +30,11 @@ class Orders(ViewSet):
         """Handle POST operations"""
 
         order = Order.objects.create(
-            customer_id = request.data["customer_id"],
-            payment_type_id = request.data["payment_type_id"]
+            customer = Customer.objects.get(pk = request.data["customer_id"]),
+            payment_type = PaymentType.objects.get(pk = request.data["payment_type_id"])
         )
+
+        serializer = OrderSerializer(order, context={'request': request})
 
         return Response(serializer.data)
 
@@ -45,9 +49,7 @@ class Orders(ViewSet):
     def update(self, request, pk=None):
 
         order = Order.objects.get(pk=pk)
-        created_at = request.data["created_at"],
-        payment_type = payment_type
-        customer = customer
+        payment_type = PaymentType.objects.get(pk=request.data["payment_type_id"])
         order.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
