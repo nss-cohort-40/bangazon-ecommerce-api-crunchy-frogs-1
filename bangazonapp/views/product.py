@@ -21,10 +21,12 @@ from bangazonapp.models import Product, Customer, ProductType
 # }
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    customer = serializers.HyperlinkedIdentityField(
-            view_name='customer',
-            lookup_field='id'
-        )
+    # customer_url = serializers.HyperlinkedIdentityField(
+    #     view_name="customer",
+    #     many=False,
+    #     required=True,
+    #     lookup_field="pk"
+    # )
 
     class Meta:
         model = Product
