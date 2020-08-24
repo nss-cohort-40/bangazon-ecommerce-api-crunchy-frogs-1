@@ -28,7 +28,6 @@ class Orders(ViewSet):
         """Handle POST operations"""
 
         order = Order.objects.create(
-            created_at = request.data["created_at"],
             customer_id = request.data["customer_id"],
             payment_type_id = request.data["payment_type_id"]
         )
