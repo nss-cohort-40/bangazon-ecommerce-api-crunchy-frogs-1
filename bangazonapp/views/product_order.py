@@ -6,11 +6,15 @@ from rest_framework import status
 from bangazonapp.models import ProductOrder, Product, Order
 
 
-class ProductOrderSerializer(serializers.ModelSerializer):
+class ProductOrderSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ProductOrder
-        fields = ('id', 'product', 'order')
+        url = serializers.HyperlinkedIdentityField(
+            view_name='productorder',
+            lookup_field='id'
+        )
+        fields = ('id', 'url', 'product', 'order')
         depth = 1
 
 
