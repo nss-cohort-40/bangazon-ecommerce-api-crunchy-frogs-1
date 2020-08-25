@@ -34,7 +34,8 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             view_name='product',
             lookup_field='id'
         )
-        fields = ("id", "url", "title", "price", "description", "quantity", "location", "image_path", "customer")
+        fields = ("id", "url", "title", "price", "description",
+                  "quantity", "location", "image_path", "customer")
         depth = 2
 
 
@@ -47,18 +48,19 @@ class Products(ViewSet):
         Returns:
             Response -- JSON serialized Product instance
         """
-        customer = Customer.objects.get(pk=request.data["customer"])
-        product_type  = ProductType.objects.get(pk=request.data["product_type"])
+        customer = Customer.objects.get(user=request.auth.user.id)
+
+        product_type = ProductType.objects.get(pk=request.data["product_type"])
 
         product = Product.objects.create(
-            title = request.data["title"],
-            price = request.data["price"],
-            description = request.data["description"],
-            quantity = request.data["quantity"],
-            location = request.data["location"],
-            image_path = request.data["image_path"],
-            product_type = product_type,
-            customer = customer
+            title=request.data["title"],
+            price=request.data["price"],
+            description=request.data["description"],
+            quantity=request.data["quantity"],
+            location=request.data["location"],
+            image_path=request.data["image_path"],
+            product_type=product_type,
+            customer=customer
         )
         serializer = ProductSerializer(product, context={'request': request})
 
@@ -73,7 +75,8 @@ class Products(ViewSet):
         try:
             # user = User.objects.get(pk=pk)
             product = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(product, many=False, context={'request': request})
+            serializer = ProductSerializer(
+                product, many=False, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -94,7 +97,6 @@ class Products(ViewSet):
         product.image_path = request.data["image_path"],
         product.product_type = request.data["product_type"]
         product.save()
-
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
@@ -123,5 +125,6 @@ class Products(ViewSet):
             Response -- JSON serialized list of products
         """
         products = Product.objects.all()
-        serializer = ProductSerializer(products, many=True, context={'request': request})
+        serializer = ProductSerializer(
+            products, many=True, context={'request': request})
         return Response(serializer.data)
