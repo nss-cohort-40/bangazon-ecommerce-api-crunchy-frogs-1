@@ -114,7 +114,11 @@ class Customers(ViewSet):
 
     def list(self, request):
 
-        customers = Customer.objects.all()  # This is my query to the database
+        if request.user.id:
+            customers = Customer.objects.filter(user=request.user.id)
+        else:
+            customers = Customer.objects.all()
+
         serializer = CustomerSerializer(
             customers, many=True, context={'request': request})
         return Response(serializer.data)
