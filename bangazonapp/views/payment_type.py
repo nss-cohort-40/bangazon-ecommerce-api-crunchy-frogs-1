@@ -26,7 +26,7 @@ class PaymentTypes(ViewSet):
     def create(self, request):
         """ POST a PaymentType """
 
-        customer = Customer.objects.get(pk=request.data['customer_id'])
+        customer = Customer.objects.get(user=request.auth.user.id)
         payment_type = PaymentType.objects.create(
             merchant_name = request.data['merchant_name'],
             account_number = request.data['account_number'],
