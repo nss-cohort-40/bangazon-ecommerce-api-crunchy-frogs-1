@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+
 from bangazonapp.models import Customer
 
 
@@ -65,7 +66,6 @@ class Customers(ViewSet):
             Response -- JSON serialized park area instance
         """
         try:
-            # user = User.objects.get(pk=pk)
             customer = Customer.objects.get(pk=pk)
             serializer = CustomerSerializer(customer, context={'request': request})
             return Response(serializer.data)
@@ -113,11 +113,7 @@ class Customers(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def list(self, request):
-        """Handle GET requests to park areas resource
 
-        Returns:
-            Response -- JSON serialized list of park areas
-        """
         customers = Customer.objects.all()  # This is my query to the database
         serializer = CustomerSerializer(
             customers, many=True, context={'request': request})
