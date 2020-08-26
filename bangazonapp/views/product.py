@@ -121,7 +121,16 @@ class Products(ViewSet):
 
         Returns:
             Response -- JSON serialized list of products
+
+        If no query parameters on request return all products without distinctions, otherwise
+        return the all products with the kewword provided in the title
         """
-        products = Product.objects.all()
+        keywords = self.request.query_params.get('keywords', None)
+        if keywords is not None:
+            products = Product.objects.filter(title__contains=keywords)
+        else:
+            products = Product.objects.all()
+
         serializer = ProductSerializer(products, many=True, context={'request': request})
+
         return Response(serializer.data)

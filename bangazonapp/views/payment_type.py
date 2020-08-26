@@ -82,7 +82,7 @@ class PaymentTypes(ViewSet):
         # Support filtering attractions by area id
         customer = self.request.query_params.get('customer', None)
         if customer is not None:
-            payment_types = payment_types.filter(customer__id=customer)
+            payment_types = payment_types.filter(title__contains=customer)
 
         serializer = PaymentTypeSerializer(
             payment_types, many=True, context={'request': request})
