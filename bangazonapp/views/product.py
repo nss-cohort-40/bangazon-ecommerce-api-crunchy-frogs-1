@@ -123,6 +123,5 @@ class Products(ViewSet):
             Response -- JSON serialized list of products
         """
         products = Product.objects.all()
-        print(products[1].product_type)
         serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
