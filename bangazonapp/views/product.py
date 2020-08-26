@@ -34,7 +34,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             view_name='product',
             lookup_field='id'
         )
-        fields = ("id", "url", "title", "price", "description", "quantity", "location", "image_path", "customer")
+        fields = ("id", "url", "title", "price", "description", "quantity", "location", "image_path", "customer", "product_type")
         depth = 2
 
 
@@ -123,5 +123,6 @@ class Products(ViewSet):
             Response -- JSON serialized list of products
         """
         products = Product.objects.all()
+        print(products[1].product_type)
         serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
