@@ -79,9 +79,6 @@ class Customers(ViewSet):
         user = User.objects.get(pk=customer.user.id)
         user.first_name = request.data["first_name"]
         user.last_name = request.data["last_name"]
-        user.username = request.data["username"]
-        user.password = make_password(request.data["password"])
-        user.email = request.data["email"]
         user.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
