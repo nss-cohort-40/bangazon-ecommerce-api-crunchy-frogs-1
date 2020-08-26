@@ -5,18 +5,16 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-
 from bangazonapp.models import Customer
 
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     
-
-
     class Meta:
         model = Customer
         url = serializers.HyperlinkedIdentityField(
@@ -25,9 +23,6 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'address', 'phone_number', 'user')
         depth = 1
-
-
-
 
 class Customers(ViewSet):
     """Park Areas for Kennywood Amusement Park"""
@@ -85,11 +80,12 @@ class Customers(ViewSet):
         customer.save()
 
         user = User.objects.get(pk=customer.user.id)
-        user.first_name = request.data["user"]["first_name"]
+        user.first_name = request.data["first_name"]
         user.last_name = request.data["last_name"]
         user.username = request.data["username"]
         user.password = make_password(request.data["password"])
         user.email = request.data["email"]
+        print(user)
         user.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
