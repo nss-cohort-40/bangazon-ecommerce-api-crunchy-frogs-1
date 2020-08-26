@@ -6,7 +6,7 @@ from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from bangazonapp.models import Customer
 
-# This function was written in Kennyapi project by the staff of NSS and reused by us
+# Function from KennyAPI modified
 @csrf_exempt
 def login_user(request):
     '''Handles the authentication of a user
