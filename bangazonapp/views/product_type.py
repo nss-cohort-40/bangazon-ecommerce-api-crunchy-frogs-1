@@ -14,11 +14,7 @@ class ProductTypeSerializer(serializers.HyperlinkedModelSerializer):
             view_name='producttype',
             lookup_field='id'
         )
-<<<<<<< HEAD
-        fields = ('id', 'url', 'name')
-=======
         fields = ('id', 'name', 'url')
->>>>>>> master
 
 
 class ProductTypes(ViewSet):
