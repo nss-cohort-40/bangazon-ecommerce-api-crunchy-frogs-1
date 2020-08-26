@@ -12,7 +12,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from bangazonapp.models import Customer
 
-
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
@@ -25,7 +24,6 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         depth = 1
 
 class Customers(ViewSet):
-    """Park Areas for Kennywood Amusement Park"""
 
     def create(self, request):
         """Handle POST operations
@@ -50,12 +48,11 @@ class Customers(ViewSet):
 
         token = Token.objects.create(user=user)
 
-
         data = json.dumps({"token": token.key})
         return HttpResponse(data, content_type='application/json')
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single park area
+        """Handle GET requests
 
         Returns:
             Response -- JSON serialized park area instance
@@ -68,7 +65,7 @@ class Customers(ViewSet):
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
-        """Handle PUT requests for a park area
+        """Handle PUT requests
 
         Returns:
             Response -- Empty body with 204 status code
@@ -85,13 +82,12 @@ class Customers(ViewSet):
         user.username = request.data["username"]
         user.password = make_password(request.data["password"])
         user.email = request.data["email"]
-        print(user)
         user.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
-        """Handle DELETE requests for a single park are
+        """Handle DELETE requests
 
         Returns:
             Response -- 200, 404, or 500 status code
