@@ -13,8 +13,6 @@ from bangazonapp.models import Customer
 
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
-    
-
 
     class Meta:
         model = Customer
@@ -24,8 +22,6 @@ class CustomerSerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'address', 'phone_number', 'user')
         depth = 2
-
-
 
 
 class Customers(ViewSet):
@@ -39,21 +35,20 @@ class Customers(ViewSet):
         """
 
         user = User.objects.create_user(
-            first_name = request.data["first_name"],
-            last_name = request.data["last_name"],
-            username = request.data["username"],
-            password = request.data["password"],
-            email = request.data["email"]
+            first_name=request.data["first_name"],
+            last_name=request.data["last_name"],
+            username=request.data["username"],
+            password=request.data["password"],
+            email=request.data["email"]
         )
 
         customer = Customer.objects.create(
-            address = request.data["address"],
-            phone_number = request.data["phone_number"],
-            user = user
+            address=request.data["address"],
+            phone_number=request.data["phone_number"],
+            user=user
         )
 
         token = Token.objects.create(user=user)
-
 
         data = json.dumps({"token": token.key})
         return HttpResponse(data, content_type='application/json')
@@ -67,7 +62,8 @@ class Customers(ViewSet):
         try:
             # user = User.objects.get(pk=pk)
             customer = Customer.objects.get(pk=pk)
-            serializer = CustomerSerializer(customer, context={'request': request})
+            serializer = CustomerSerializer(
+                customer, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -118,7 +114,10 @@ class Customers(ViewSet):
         Returns:
             Response -- JSON serialized list of park areas
         """
-        customers = Customer.objects.all()  # This is my query to the database
+        if request.user.id:
+            customers = Customer.objects.filter(user=request.user.id)
+        else:
+            customers = Customer.objects.all()
         serializer = CustomerSerializer(
             customers, many=True, context={'request': request})
         return Response(serializer.data)
