@@ -48,9 +48,9 @@ class Products(ViewSet):
         Returns:
             Response -- JSON serialized Product instance
         """
-        customer = Customer.objects.get(user=request.auth.user.id)
-
-        product_type = ProductType.objects.get(pk=request.data["product_type"])
+        customer = Customer.objects.get(user_id=request.user.id)
+        product_type = ProductType.objects.get(
+            pk=request.data['product_type_id'])
 
         product = Product.objects.create(
             title=request.data["title"],
