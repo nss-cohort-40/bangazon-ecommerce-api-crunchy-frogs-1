@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 from bangazonapp.models import Customer
 
 class CustomerSerializer(serializers.HyperlinkedModelSerializer):
-    
     class Meta:
         model = Customer
         url = serializers.HyperlinkedIdentityField(
@@ -33,17 +32,17 @@ class Customers(ViewSet):
         """
 
         user = User.objects.create_user(
-            first_name = request.data["first_name"],
-            last_name = request.data["last_name"],
-            username = request.data["username"],
-            password = request.data["password"],
-            email = request.data["email"]
+            first_name=request.data["first_name"],
+            last_name=request.data["last_name"],
+            username=request.data["username"],
+            password=request.data["password"],
+            email=request.data["email"]
         )
 
         customer = Customer.objects.create(
-            address = request.data["address"],
-            phone_number = request.data["phone_number"],
-            user = user
+            address=request.data["address"],
+            phone_number=request.data["phone_number"],
+            user=user
         )
 
         token = Token.objects.create(user=user)
@@ -59,7 +58,8 @@ class Customers(ViewSet):
         """
         try:
             customer = Customer.objects.get(pk=pk)
-            serializer = CustomerSerializer(customer, context={'request': request})
+            serializer = CustomerSerializer(
+                customer, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -110,7 +110,6 @@ class Customers(ViewSet):
             customers = Customer.objects.filter(user=request.user.id)
         else:
             customers = Customer.objects.all()
-
         serializer = CustomerSerializer(
             customers, many=True, context={'request': request})
         return Response(serializer.data)
