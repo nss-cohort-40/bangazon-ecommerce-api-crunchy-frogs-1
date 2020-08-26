@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework.authtoken.views import obtain_auth_token
-from bangazonapp.views import Customers, UserViewSet, PaymentTypes, ProductTypes, Products
+from rest_framework.authtoken import views
+from bangazonapp.views import Customers, UserViewSet, PaymentTypes, ProductTypes, Products, login_user
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'customer', Customers, 'customer')
@@ -29,4 +30,6 @@ router.register(r'producttypes', ProductTypes, 'producttype')
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    path('login/', login_user),
+    # url(r'login/', views.obtain_auth_token)
 ]
