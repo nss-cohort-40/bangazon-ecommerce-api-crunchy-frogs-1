@@ -31,5 +31,4 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('login/', login_user),
-    # url(r'login/', views.obtain_auth_token)
 ]
