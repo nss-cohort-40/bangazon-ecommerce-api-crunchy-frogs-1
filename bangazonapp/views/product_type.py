@@ -11,10 +11,10 @@ class ProductTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ProductType
         url = serializers.HyperlinkedIdentityField(
-            view_name='product_type',
+            view_name='producttype',
             lookup_field='id'
         )
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'url')
 
 
 class ProductTypes(ViewSet):
