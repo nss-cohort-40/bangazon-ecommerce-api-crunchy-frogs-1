@@ -6,18 +6,16 @@ from rest_framework import status
 from bangazonapp.models import PaymentType, Customer
 
 
-
-
-class PaymentTypeSerializer(serializers.HyperlinkedModelSerializer):
-
+class PaymentTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PaymentType
         url = serializers.HyperlinkedIdentityField(
-            view_name='payment_type',
+            view_name='paymenttype',
             lookup_field='id'
         )
-        fields = ('id', 'merchant_name', 'account_number', 'expiration_date', 'customer')
+        fields = ('id', 'merchant_name', 'account_number',
+                  'expiration_date', 'customer')
         depth = 1
 
 
@@ -28,13 +26,14 @@ class PaymentTypes(ViewSet):
 
         customer = Customer.objects.get(user=request.auth.user.id)
         payment_type = PaymentType.objects.create(
-            merchant_name = request.data['merchant_name'],
-            account_number = request.data['account_number'],
-            expiration_date = request.data['expiration_date'],
-            customer = customer,
+            merchant_name=request.data['merchant_name'],
+            account_number=request.data['account_number'],
+            expiration_date=request.data['expiration_date'],
+            customer=customer,
         )
 
-        serializer = PaymentTypeSerializer(payment_type, context={'request': request})
+        serializer = PaymentTypeSerializer(
+            payment_type, context={'request': request})
 
         return Response(serializer.data)
 
@@ -43,14 +42,15 @@ class PaymentTypes(ViewSet):
 
         try:
             payment_type = PaymentType.objects.get(pk=pk)
-            serializer = PaymentTypeSerializer(payment_type, context={'request': request})
+            serializer = PaymentTypeSerializer(
+                payment_type, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
     def update(self, request, pk=None):
         """ PUT a PaymentType """
-        
+
         payment_type = PaymentType.objects.get(pk=pk)
         payment_type.merchant_name = request.data["merchant_name"]
         payment_type.account_number = request.data["account_number"]
@@ -61,7 +61,7 @@ class PaymentTypes(ViewSet):
 
     def destroy(self, request, pk=None):
         """ DELETE a PaymentType """
-        
+
         try:
             payment_type = PaymentType.objects.get(pk=pk)
             payment_type.delete()
@@ -76,7 +76,7 @@ class PaymentTypes(ViewSet):
 
     def list(self, request):
         """ GET all PaymentTypes """
-        
+
         payment_types = PaymentType.objects.all()
 
         # Support filtering attractions by area id
