@@ -61,6 +61,14 @@ class ProductOrders(ViewSet):
     def list(self, request):
 
         product_orders = ProductOrder.objects.all()
+        
+        product = self.request.query_params.get('product', None)
+        if product is not None:
+            product_orders = product_orders.filter(product__id=product)
+        order = self.request.query_params.get('order', None)
+        if order is not None:
+            product_orders = product_orders.filter(order__id=order)
+            
         serializer = ProductOrderSerializer(
             product_orders, many=True, context={'request': request})
         return Response(serializer.data)
