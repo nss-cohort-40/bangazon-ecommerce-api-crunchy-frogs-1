@@ -119,15 +119,16 @@ class Products(ViewSet):
     def list(self, request):
         """Handle GET requests to product resource
 
+        If no query parameters on request return all products without distinctions, otherwise
+        return the all products with the kewword provided in the title
+
         Returns:
             Response -- JSON serialized list of products
 
-        If no query parameters on request return all products without distinctions, otherwise
-        return the all products with the kewword provided in the title
         """
-        keywords = self.request.query_params.get('keywords', None)
-        if keywords is not None:
-            products = Product.objects.filter(title__contains=keywords)
+        search = self.request.query_params.get('search', None)
+        if search is not None:
+            products = Product.objects.filter(title__contains=search)
         else:
             products = Product.objects.all()
 
