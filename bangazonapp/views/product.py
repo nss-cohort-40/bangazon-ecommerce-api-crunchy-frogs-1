@@ -125,6 +125,11 @@ class Products(ViewSet):
             Response -- JSON serialized list of products
         """
         products = Product.objects.all()
+
+        product_type = self.request.query_params.get('product_type', None)
+        if product_type is not None:
+            products = products.filter(product_type__id=product_type)
+
         serializer = ProductSerializer(
             products, many=True, context={'request': request})
         return Response(serializer.data)
