@@ -124,16 +124,18 @@ class Products(ViewSet):
         Returns:
             Response -- JSON serialized list of products
         """
-        display_amount = self.request.query_params.get('limit', None)
-        if display_amount is not None:
-            products = Product.objects.all()[:int(display_amount)]
-        else:
-            products = Product.objects.all()
+        products = Product.objects.all()
 
+        display_amount = self.request.query_params.get('limit', None)
+        sort = self.request.query_params.get('sort', None)
         product_type = self.request.query_params.get('product_type', None)
+
+        if sort is not None:
+            products = products.order_by(sort)
+        if display_amount is not None:
+            products = products[:int(display_amount)]
         if product_type is not None:
             products = products.filter(product_type__id=product_type)
-
 
         serializer = ProductSerializer(
             products, many=True, context={'request': request})
