@@ -30,8 +30,8 @@ class Orders(ViewSet):
         """Handle POST operations"""
 
         order = Order.objects.create(
-            customer = Customer.objects.get(pk = request.data["customer_id"]),
-            payment_type = PaymentType.objects.get(pk = request.data["payment_type_id"])
+            customer = Customer.objects.get(pk = request.user.id),
+            payment_type = None
         )
 
         serializer = OrderSerializer(order, context={'request': request})
@@ -69,6 +69,13 @@ class Orders(ViewSet):
 
     def list(self, request):
         orders = Order.objects.all()  # This is my query to the database
+
+        paymenttype = self.request.query_params.get('paymenttype', None)
+        if paymenttype is not None:
+            customer = request.user.id
+            orders = orders.filter(customer__id=customer)
+            orders = orders.filter(payment_type=None)
+
         serializer = OrderSerializer(
             orders, many=True, context={'request': request})
         return Response(serializer.data)
