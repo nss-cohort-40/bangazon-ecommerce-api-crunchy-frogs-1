@@ -72,8 +72,8 @@ class Orders(ViewSet):
 
         paymenttype = self.request.query_params.get('paymenttype', None)
         if paymenttype is not None:
-            customer = request.user.id
-            orders = orders.filter(customer__id=customer)
+            customer = Customer.objects.get(user__id=request.user.id)
+            orders = orders.filter(customer=customer)
             orders = orders.filter(payment_type=None)
 
         serializer = OrderSerializer(
