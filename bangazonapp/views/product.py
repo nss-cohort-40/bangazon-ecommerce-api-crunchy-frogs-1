@@ -126,7 +126,14 @@ class Products(ViewSet):
         """
         products = Product.objects.all()
 
+        display_amount = self.request.query_params.get('limit', None)
+        sort = self.request.query_params.get('sort', None)
         product_type = self.request.query_params.get('product_type', None)
+
+        if sort is not None:
+            products = products.order_by(sort)
+        if display_amount is not None:
+            products = products[:int(display_amount)]
         if product_type is not None:
             products = products.filter(product_type__id=product_type)
 
