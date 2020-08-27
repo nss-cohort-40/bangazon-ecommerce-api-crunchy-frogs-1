@@ -6,27 +6,7 @@ from rest_framework import serializers
 from rest_framework import status
 from bangazonapp.models import Product, Customer, ProductType
 
-
-# Table Product {
-#   Id int PK
-#   Title varchar(50)
-#   CustomerId int
-#   Price decimal
-#   Description varchar(255)
-#   Quantity int
-#   Location varchar(75)
-#   ImagePath varchar(255)
-#   CreatedAt datetime
-#   ProductTypeId int
-# }
-
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    # customer_url = serializers.HyperlinkedIdentityField(
-    #     view_name="customer",
-    #     many=False,
-    #     required=True,
-    #     lookup_field="pk"
-    # )
 
     class Meta:
         model = Product
