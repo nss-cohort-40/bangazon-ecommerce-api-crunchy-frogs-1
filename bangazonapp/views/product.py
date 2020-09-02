@@ -6,27 +6,7 @@ from rest_framework import serializers
 from rest_framework import status
 from bangazonapp.models import Product, Customer, ProductType
 
-
-# Table Product {
-#   Id int PK
-#   Title varchar(50)
-#   CustomerId int
-#   Price decimal
-#   Description varchar(255)
-#   Quantity int
-#   Location varchar(75)
-#   ImagePath varchar(255)
-#   CreatedAt datetime
-#   ProductTypeId int
-# }
-
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    # customer_url = serializers.HyperlinkedIdentityField(
-    #     view_name="customer",
-    #     many=False,
-    #     required=True,
-    #     lookup_field="pk"
-    # )
 
     class Meta:
         model = Product
@@ -121,11 +101,15 @@ class Products(ViewSet):
     def list(self, request):
         """Handle GET requests to product resource
 
+        If no query parameters on request return all products without distinctions, otherwise
+        return the all products with the kewword provided in the title
+
         Returns:
             Response -- JSON serialized list of products
+
         """
         products = Product.objects.all()
-
+        search = self.request.query_params.get('search', None)
         display_amount = self.request.query_params.get('limit', None)
         sort = self.request.query_params.get('sort', None)
         product_type = self.request.query_params.get('product_type', None)
@@ -136,7 +120,9 @@ class Products(ViewSet):
             products = products[:int(display_amount)]
         if product_type is not None:
             products = products.filter(product_type__id=product_type)
+        if search is not None:
+            products = products.filter(title__contains=search)
 
-        serializer = ProductSerializer(
-            products, many=True, context={'request': request})
+        serializer = ProductSerializer(products, many=True, context={'request': request})
+
         return Response(serializer.data)
