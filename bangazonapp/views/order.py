@@ -49,7 +49,7 @@ class Orders(ViewSet):
     def update(self, request, pk=None):
 
         order = Order.objects.get(pk=pk)
-        payment_type = PaymentType.objects.get(pk=request.data["payment_type_id"])
+        payment_type = PaymentType.objects.get(pk=request.data["payment_type__id"])
         order.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -71,8 +71,9 @@ class Orders(ViewSet):
         orders = Order.objects.all()  # This is my query to the database
 
         paymenttype = self.request.query_params.get('paymenttype', None)
-        if paymenttype is not None:
-            customer = request.user.id
+        customer = request.user.id
+
+        if paymenttype:
             orders = orders.filter(customer__id=customer)
             orders = orders.filter(payment_type=None)
 
