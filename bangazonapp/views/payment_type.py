@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from bangazonapp.models import PaymentType, Customer
-
+from django.contrib.auth.models import User
 
 class PaymentTypeSerializer(serializers.ModelSerializer):
 
@@ -18,6 +18,10 @@ class PaymentTypeSerializer(serializers.ModelSerializer):
                   'expiration_date', 'customer')
         depth = 1
 
+def getUser(request):
+    user = User.objects.get(pk=request.user.id)
+    customer = Customer.objects.get(pk=user.customer.id)
+    return customer
 
 class PaymentTypes(ViewSet):
 
@@ -80,9 +84,9 @@ class PaymentTypes(ViewSet):
         payment_types = PaymentType.objects.all()
 
         # Support filtering attractions by area id
-        customer = self.request.query_params.get('customer', None)
+        customer = getUser(request)
         if customer is not None:
-            payment_types = payment_types.filter(customer__id=customer)
+            payment_types = payment_types.filter(customer__id=customer.id)
 
         serializer = PaymentTypeSerializer(
             payment_types, many=True, context={'request': request})

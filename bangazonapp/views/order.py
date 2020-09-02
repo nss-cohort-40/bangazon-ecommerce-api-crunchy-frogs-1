@@ -24,13 +24,16 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'created_at', 'customer', 'payment_type')
         depth = 1
 
+def getUser(request):
+    user = User.objects.get(pk=request.user.id)
+    customer = Customer.objects.get(pk=user.customer.id)
+    return customer
 class Orders(ViewSet):
 
     def create(self, request):
         """Handle POST operations"""
-
         order = Order.objects.create(
-            customer = Customer.objects.get(pk = request.user.id),
+            customer = getUser(request),
             payment_type = None
         )
 
@@ -49,7 +52,8 @@ class Orders(ViewSet):
     def update(self, request, pk=None):
 
         order = Order.objects.get(pk=pk)
-        payment_type = PaymentType.objects.get(pk=request.data["payment_type_id"])
+        payment_type = PaymentType.objects.get(pk=request.data["payment_type"])
+        order.payment_type = payment_type
         order.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -72,8 +76,8 @@ class Orders(ViewSet):
 
         paymenttype = self.request.query_params.get('paymenttype', None)
         if paymenttype is not None:
-            customer = request.user.id
-            orders = orders.filter(customer__id=customer)
+            customer = getUser(request)
+            orders = orders.filter(customer__id=customer.id)
             orders = orders.filter(payment_type=None)
 
         serializer = OrderSerializer(
