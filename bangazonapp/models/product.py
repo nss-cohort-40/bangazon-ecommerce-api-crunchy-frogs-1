@@ -12,9 +12,8 @@ class Product(models.Model):
     description = models.CharField(max_length=255)
     quantity = models.IntegerField()
     location = models.CharField(max_length=75)
-    image_path = models.CharField(max_length=255, null=True)
+    image_path = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
         verbose_name = ("Product")
