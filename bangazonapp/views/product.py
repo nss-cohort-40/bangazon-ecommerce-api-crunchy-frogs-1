@@ -15,7 +15,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ("id", "url", "title", "price", "description", "quantity",
-                  "location", "image_path", "customer", "product_type", )
+                  "location", "image_path", "customer", "product_type",  "local_delivery")
         depth = 2
 
 
@@ -39,6 +39,7 @@ class Products(ViewSet):
             quantity=request.data["quantity"],
             location=request.data["location"],
             image_path=request.data["image_path"],
+            local_delivery=request.data["local_delivery"],
             product_type=product_type,
             customer=customer
         )

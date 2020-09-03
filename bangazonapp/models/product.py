@@ -14,6 +14,7 @@ class Product(models.Model):
     location = models.CharField(max_length=75)
     image_path = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    local_delivery = models.BooleanField()
 
     class Meta:
         verbose_name = ("Product")
