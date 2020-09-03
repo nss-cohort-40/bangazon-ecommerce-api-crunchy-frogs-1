@@ -73,13 +73,13 @@ class Orders(ViewSet):
 
     def list(self, request):
         orders = Order.objects.all()  # This is my query to the database
-
+        closed = self.request.query_params.get('closed', None)
         paymenttype = self.request.query_params.get('paymenttype', None)
         if paymenttype is not None:
             customer = getUser(request)
             orders = orders.filter(customer__id=customer.id)
             orders = orders.filter(payment_type=None)
-        else:
+        elif closed is not None:
             customer = getUser(request)
             orders = orders.filter(customer__id=customer.id)
             orders = orders.filter(payment_type__isnull=False)
