@@ -82,6 +82,7 @@ class Orders(ViewSet):
         else:
             customer = getUser(request)
             orders = orders.filter(customer__id=customer.id)
+            orders = orders.filter(payment_type__isnull=False)
 
         serializer = OrderSerializer(
             orders, many=True, context={'request': request})
