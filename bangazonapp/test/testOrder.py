@@ -15,7 +15,6 @@ from rest_framework.authtoken.models import Token
 
 class TestOrder(TestCase):
 
-    # setUp() is called before every test function to set up any objects that may be modified by the test (every test function will get a "fresh" version of these objects).
     def setUp(self):
         self.customer = Customer.objects.create(
             address="9 Street",
@@ -38,18 +37,12 @@ class TestOrder(TestCase):
               "created_at": "9:00"
             }
 
-         #  Use the client to send the request and store the response
         response = self.client.post(
-            reverse('order-list'), new_order, HTTP_AUTHORIZATION='Token ' + str(self.token)
+            reverse('orders-list'), new_order, HTTP_AUTHORIZATION='Token ' + str(self.token)
           )
-
-        # Getting 200 back because we have a success url
+    
         self.assertEqual(response.status_code, 200)
-
-        # Query the table to see if there's one ParkArea instance in there. Since we are testing a POST request, we don't need to test whether an HTTP GET works. So, we just use the ORM to see if the thing we saved is in the db.
         self.assertEqual(Order.objects.count(), 1)
-
-        # And see if it's the one we just added by checking one of the properties. Here, name.
         self.assertEqual(Order.objects.get().created_at, '9:00')
 
     # def test_get_parkareas(self):
