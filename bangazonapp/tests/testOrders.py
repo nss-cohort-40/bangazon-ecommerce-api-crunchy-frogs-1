@@ -26,7 +26,7 @@ class TestOrder(TestCase):
             merchant_name='VISA',
             account_number='2222545490992211',
             expiration_date='2020/11/01',
-            customer=self.customer,
+            customer=self.customer
         )
         self.token = Token.objects.create(user=self.user)
 
