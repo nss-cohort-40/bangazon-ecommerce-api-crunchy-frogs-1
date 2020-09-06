@@ -19,31 +19,32 @@ class TestOrder(TestCase):
         self.customer = Customer.objects.create(
             address="9 Street",
             phone_number="8888888888",
-            user=User.objects.create_user 
+            user=User.objects.create_user({
+                "username": "spork",
+                "password": "spokr"
+            })
         )
         self.payment_type = PaymentType.objects.create(
             merchant_name='VISA',
             account_number='2222545490992211',
-            expiration_date='2020/11/01',
+            expiration_date='2020-11-01',
             customer=self.customer
         )
-        self.token = Token.objects.create(user=self.user)
+        self.token = Token.objects.create(user=self.customer.user)
 
     def test_post_order(self):
 
         new_order = {
               "customer": self.customer,
-              "payment_type": self.payment_type,
-              "created_at": "9:00"
             }
 
         response = self.client.post(
-            reverse('orders-list'), new_order, HTTP_AUTHORIZATION='Token ' + str(self.token)
+            reverse('order-list'), new_order, HTTP_AUTHORIZATION='Token ' + str(self.token)
           )
     
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Order.objects.count(), 1)
-        self.assertEqual(Order.objects.get().created_at, '9:00')
+        self.assertEqual(Order.objects.get().customer, self.customer)
 
     # def test_get_parkareas(self):
 
