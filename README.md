@@ -1,6 +1,6 @@
 # Bangazon Django Backend API
 
-Bangazon is a personal E-Commerce app where users can buy and sell products. Bangazon comes in two parts: a front end React app, and a backend Django REST API.
+Bangazon is a personal E-Commerce app where users can buy and sell products. Bangazon comes in two parts: a front end React app, and a backend Django REST API. Visit https://github.com/nss-cohort-40/bangazon-ecommerce-client-crunchyfrogs for the front end of this app.
 
 ## Technology used
 
