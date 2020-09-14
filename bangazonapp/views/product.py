@@ -56,8 +56,7 @@ class Products(ViewSet):
         try:
             # user = User.objects.get(pk=pk)
             product = Product.objects.get(pk=pk)
-            serializer = ProductSerializer(
-                product, many=False, context={'request': request})
+            serializer = ProductSerializer(product, many=False, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
